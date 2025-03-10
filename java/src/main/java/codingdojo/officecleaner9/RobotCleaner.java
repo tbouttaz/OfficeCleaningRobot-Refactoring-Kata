@@ -60,8 +60,8 @@ public class RobotCleaner {
     }
     /**
      * Sorted List(for fast searching) of visited spaces(coordinates) on floor.
-    */
-    public TreeMap<String, Coordinates> visitedPlaces = new TreeMap<String, Coordinates>();
+     */
+    public TreeMap<String, Coordinates> visitedPlaces = new TreeMap<String, Coordinates>(); //TODO Refactor: this could just be a Set
 
     /**
      * Constructor with no parameter
@@ -100,28 +100,7 @@ public class RobotCleaner {
         {
             case 'N':
                 for (int i = 0; i < steps; i++)
-                {
-                    //if robot is at the boundary of the floor it just stops there and wait for next direction 
-                    if (CURRENT_Y + 1 > FLOOR_UPPER_LENGTH)
-                    {
-                        CURRENT_Y = FLOOR_UPPER_LENGTH;
-                        break;
-                    }
-                    else
-                    {
-                        //if place is not visited
-                        if (!visitedPlaces.containsKey(String.format("%s %s", CURRENT_X, CURRENT_Y + 1)))
-                        {
-                            //Visit it and add to the visited places
-                            visitedPlaces.put(String.format("%s %s", CURRENT_X, CURRENT_Y + 1), new Coordinates(CURRENT_X, ++CURRENT_Y));
-                        }
-                        else
-                        {
-                            //otherwise moves to the next location
-                            ++CURRENT_Y;
-                        }
-                    }
-                }
+                    processStepToNorth();
                 break;
             case 'S':
                 for (int i = 0; i < steps; i++)
@@ -201,9 +180,28 @@ public class RobotCleaner {
         }
     }
 
+    private void processStepToNorth() {
+        // if robot is at the boundary of the floor it just stops there and wait for next direction
+        if (isOutOfBoundWhenSteppingNorth()) {
+            CURRENT_Y = FLOOR_UPPER_LENGTH;
+        } else {
+            //if place is not visited
+            if (!visitedPlaces.containsKey(String.format("%s %s", CURRENT_X, CURRENT_Y + 1))) {
+                //Visit it and add to the visited places
+                visitedPlaces.put(String.format("%s %s", CURRENT_X, CURRENT_Y + 1), new Coordinates(CURRENT_X, ++CURRENT_Y));
+            } else {
+                //otherwise moves to the next location
+                ++CURRENT_Y;
+            }
+        }
+    }
+
+    private boolean isOutOfBoundWhenSteppingNorth() {
+        return CURRENT_Y + 1 > FLOOR_UPPER_LENGTH;
+    }
+
     public void PrintVisitedPlaces()
     {
-        
         var result = "";
         for (var spot : visitedPlaces.values())
         {
