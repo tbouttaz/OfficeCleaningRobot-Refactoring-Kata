@@ -109,28 +109,8 @@ public class RobotCleaner {
                 }
                 break;
             case 'E':
-                for (int i = 0; i < steps; i++)
-                {
-                    //if robot is at the boundary of the floor it just stops there and wait for next direction 
-                    if (CURRENT_X - 1 < FLOOR_LOWER_WIDTH)
-                    {
-                        CURRENT_X = FLOOR_LOWER_WIDTH;
-                        break;
-                    }
-                    else
-                    {
-                        //if place is not visited
-                        if (!visitedPlaces.containsKey(String.format("%s %s", CURRENT_X - 1, CURRENT_Y)))
-                        {
-                            //Visit it and add to the visited places
-                            visitedPlaces.put(String.format("%s %s", CURRENT_X - 1, CURRENT_Y), new Coordinates(--CURRENT_X, CURRENT_Y));
-                        }
-                        else
-                        {
-                            //otherwise moves to the next location
-                            --CURRENT_X;
-                        }
-                    }
+                for (int i = 0; i < steps; i++) {
+                    processStepToEast();
                 }
                 break;
             case 'W':
@@ -158,6 +138,28 @@ public class RobotCleaner {
                     }
                 }
                 break;
+        }
+    }
+
+    private void processStepToEast() {
+        //if robot is at the boundary of the floor it just stops there and wait for next direction
+        if (CURRENT_X - 1 < FLOOR_LOWER_WIDTH)
+        {
+            CURRENT_X = FLOOR_LOWER_WIDTH;
+        }
+        else
+        {
+            //if place is not visited
+            if (!visitedPlaces.containsKey(String.format("%s %s", CURRENT_X - 1, CURRENT_Y)))
+            {
+                //Visit it and add to the visited places
+                visitedPlaces.put(String.format("%s %s", CURRENT_X - 1, CURRENT_Y), new Coordinates(--CURRENT_X, CURRENT_Y));
+            }
+            else
+            {
+                //otherwise moves to the next location
+                --CURRENT_X;
+            }
         }
     }
 
