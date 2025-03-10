@@ -105,26 +105,7 @@ public class RobotCleaner {
             case 'S':
                 for (int i = 0; i < steps; i++)
                 {
-                    //if robot is at the boundary of the floor it just stops there and wait for next direction 
-                    if (CURRENT_Y - 1 < FLOOR_LOWER_LENGTH)
-                    {
-                        CURRENT_Y = FLOOR_LOWER_LENGTH;
-                        break;
-                    }
-                    else
-                    {
-                        //if place is not visited
-                        if (!visitedPlaces.containsKey(String.format("%s %s", CURRENT_X, CURRENT_Y - 1)))
-                        {
-                            //Visit it and add to the visited places
-                            visitedPlaces.put(String.format("%s %s", CURRENT_X, CURRENT_Y - 1), new Coordinates(CURRENT_X, --CURRENT_Y));
-                        }
-                        else
-                        {
-                            //otherwise moves to the next location
-                            --CURRENT_Y;
-                        }
-                    }
+                    processStepToSouth();
                 }
                 break;
             case 'E':
@@ -177,6 +158,28 @@ public class RobotCleaner {
                     }
                 }
                 break;
+        }
+    }
+
+    private void processStepToSouth() {
+        //if robot is at the boundary of the floor it just stops there and wait for next direction
+        if (CURRENT_Y - 1 < FLOOR_LOWER_LENGTH)
+        {
+            CURRENT_Y = FLOOR_LOWER_LENGTH;
+        }
+        else
+        {
+            //if place is not visited
+            if (!visitedPlaces.containsKey(String.format("%s %s", CURRENT_X, CURRENT_Y - 1)))
+            {
+                //Visit it and add to the visited places
+                visitedPlaces.put(String.format("%s %s", CURRENT_X, CURRENT_Y - 1), new Coordinates(CURRENT_X, --CURRENT_Y));
+            }
+            else
+            {
+                //otherwise moves to the next location
+                --CURRENT_Y;
+            }
         }
     }
 
